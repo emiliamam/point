@@ -1,10 +1,22 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const morgan = require("morgan");
+const winston = require("winston");
 
 const app = express();
 const PORT = 5050;
 
+app.use(express.json()); 
+
+const logger = winston.createLogger({
+    level: "info",
+    transports: [
+      new winston.transports.Console({ format: winston.format.simple() }), // Логирование в консоль
+      new winston.transports.File({ filename: "server.log" }) // Логирование в файл
+    ]
+  });
+  
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
@@ -21,46 +33,74 @@ app.listen(PORT, () => {
 
 const db = require("./db");
 
+// Маршрут регистрации
 app.post("/register", (req, res) => {
     const { email, password, name } = req.body;
   
-    db.run(
-      "INSERT INTO users (email, password, name) VALUES (?, ?, ?)",
-      [email, password, name],
-      function (err) {
-        if (err) {
-          res.status(400).json({ error: "Пользователь с таким email уже существует" });
-        } else {
+    if (!email || !password || !name) {
+      return res.status(400).json({ error: "Не все поля заполнены" });
+    }
+  
+    // Хэшируем пароль перед сохранением
+    bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+      if (err) {
+        console.error("Ошибка хэширования пароля", err);
+        return res.status(500).json({ error: "Ошибка сервера" });
+      }
+  
+      // Вставляем данные в базу
+      db.run(
+        "INSERT INTO users (email, password, name) VALUES (?, ?, ?)",
+        [email, hashedPassword, name],
+        function (err) {
+          if (err) {
+            console.error("Ошибка при добавлении пользователя", err);
+            return res.status(400).json({ error: "Пользователь с таким email уже существует" });
+          }
           res.json({ success: true, id: this.lastID });
         }
-      }
-    );
+      );
+    });
   });
-
+  
+  // Маршрут логина
   app.post("/login", (req, res) => {
-    const { email, password } = req.body; // Данные из запроса
+    const { email, password } = req.body;
   
-    db.get(
-      "SELECT * FROM users WHERE email = ? AND password = ?",
-      [email, password],
-      (err, user) => {
-        if (err) {
-          // Ошибка выполнения запроса
-          console.error("Ошибка базы данных:", err.message);
-          return res.status(500).json({ error: "Ошибка базы данных" });
-        }
+    if (!email || !password) {
+      return res.status(400).json({ error: "Не все поля заполнены" });
+    }
   
-        if (!user) {
-          // Пользователь не найден
-          return res.status(400).json({ error: "Неверный email или пароль" });
-        }
-  
-        // Пользователь найден
-        res.json({ success: true, user });
+    // Ищем пользователя в базе данных
+    db.get("SELECT * FROM users WHERE email = ?", [email], (err, user) => {
+      if (err) {
+        console.error("Ошибка базы данных:", err.message);
+        return res.status(500).json({ error: "Ошибка базы данных" });
       }
-    );
+  
+      if (!user) {
+        // Если пользователь не найден
+        return res.status(400).json({ error: "Неверный email или пароль" });
+      }
+  
+      // Сравниваем хэш пароля
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (err) {
+          console.error("Ошибка при проверке пароля", err);
+          return res.status(500).json({ error: "Ошибка сервера" });
+        }
+  
+        if (result) {
+          // Пароль совпадает
+          res.json({ success: true, user });
+        } else {
+          // Пароль не совпадает
+          res.status(400).json({ error: "Неверный email или пароль" });
+        }
+      });
+    });
   });
-
+  
 app.get("/tests", (req, res) => {
 db.all("SELECT * FROM tests", (err, rows) => {
     if (err) {

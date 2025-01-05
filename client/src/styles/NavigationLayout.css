@@ -1,0 +1,22 @@
+.layout {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .navigation {
+    background-color: #497ae2;
+    width: 250px;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+    background-color: #ebf4fc;
+    overflow-y: auto;
+    box-sizing: border-box;
+    margin-left: 40px;
+  }
+  

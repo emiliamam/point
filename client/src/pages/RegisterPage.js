@@ -1,52 +1,78 @@
+// RegisterPage.js
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Для навигации после регистрации
+import "../styles/RegisterPage.css"; // Стили для страницы регистрации
+
+// Кастомная кнопка
+const CustomButton = ({ children, onClick }) => {
+  return (
+    <button className="custom-button" onClick={onClick}>
+      {children}
+    </button>
+  );
+};
 
 const RegisterPage = () => {
-  const [form, setForm] = useState({ email: "", password: "", name: "" });
-  const [message, setMessage] = useState("");
+  const [name, setName] = useState(""); // Хранение имени
+  const [email, setEmail] = useState(""); // Хранение email
+  const [password, setPassword] = useState(""); // Хранение пароля
+  const [confirmPassword, setConfirmPassword] = useState(""); // Хранение подтверждения пароля
+  const navigate = useNavigate(); // Хук для навигации
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:5050/register", form);
-      setMessage("Регистрация успешна!");
-    } catch (error) {
-      setMessage("Ошибка: " + error.response.data.error);
+  const handleRegister = () => {
+    if (password === confirmPassword) {
+      // Логика успешной регистрации (для демонстрации)
+      navigate("/dashboard");
+    } else {
+      alert("Пароли не совпадают");
     }
   };
 
   return (
-    <div>
-      <h1>Регистрация</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Имя"
-          value={form.name}
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Пароль"
-          value={form.password}
-          onChange={handleChange}
-        />
-        <button type="submit">Зарегистрироваться</button>
-      </form>
-      {message && <p>{message}</p>}
+    <div className="registration-page">
+      <div className="registration-container">
+        <div className="header-box">
+          <h1>Зарегистрироваться</h1>
+        </div>
+        <div className="form-box">
+          <div className="form-row">
+            <input
+              type="text"
+              placeholder="ФИО"
+              className="input-field"
+              value={name}
+              onChange={(e) => setName(e.target.value)} // Обработка ввода имени
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              className="input-field"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)} // Обработка ввода email
+            />
+          </div>
+          <div className="form-row">
+            <input
+              type="password"
+              placeholder="Пароль"
+              className="input-field"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} // Обработка ввода пароля
+            />
+            <input
+              type="password"
+              placeholder="Повторите пароль"
+              className="input-field"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)} // Обработка ввода подтверждения пароля
+            />
+          </div>
+          <CustomButton onClick={handleRegister}>Зарегистрироваться</CustomButton>
+          <a href="/login" className="forgot-password">
+            Уже есть аккаунт?
+          </a>
+        </div>
+      </div>
     </div>
   );
 };

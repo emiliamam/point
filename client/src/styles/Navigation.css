@@ -1,0 +1,25 @@
+.navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav-item {
+    display: block;
+    padding: 15px;
+    font-family: "Geometria Medium", sans-serif;
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav-item:hover {
+    background-color: #3257a4;
+  }
+  
+  .nav-item.active {
+    background-color: #3257a4;
+  }
+  

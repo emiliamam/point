@@ -1,0 +1,118 @@
+/* Общий фон */
+body {
+    margin: 0;
+    font-family: "Geometria", sans-serif;
+    background-color: #ebf4fc;
+  }
+  
+  /* Основной контейнер */
+  .dashboard {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* Навигационная панель */
+  .navigation {
+    background-color: #497ae2;
+    width: 250px;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav-item {
+    padding: 15px;
+    font-family: "Geometria Medium", sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav-item.active,
+  .nav-item:hover {
+    background-color: #3257a4;
+  }
+  
+  /* Контент страницы */
+  .testing-page {
+    flex: 1;
+    padding: 20px;
+    background-color: #ebf4fc;
+    box-sizing: border-box;
+  }
+  
+  .testing-page h2 {
+    font-family: "Geometria Medium", sans-serif;
+    color: #3257a4;
+    margin-bottom: 20px;
+  }
+  
+  /* Таблица тестов */
+  .test-table {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #d1d9e6;
+    width: 100%;
+  }
+  
+  .test-row {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #d1d9e6;
+    gap: 16px;
+  }
+  
+  .test-row:last-child {
+    border-bottom: none;
+  }
+  
+  .test-number {
+    width: 5%;
+    font-family: "Geometria Light", sans-serif;
+    color: #3257a4;
+    text-align: center;
+  }
+  
+  .test-name {
+    flex: 2;
+    font-family: "Geometria Light", sans-serif;
+    color: #3257a4;
+  }
+  
+  .test-status {
+    flex: 1;
+    font-family: "Geometria Light", sans-serif;
+    color: #3257a4;
+    text-align: center;
+  }
+  
+  /* Кастовая кнопка */
+  .custom-button {
+    flex: 1;
+    padding: 8px 12px;
+    font-family: "Geometria Medium", sans-serif;
+    font-size: 14px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #3257a4, #497ae2, #3257a4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .content {
+    padding: 20px;
+  }
