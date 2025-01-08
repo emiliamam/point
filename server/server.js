@@ -3,9 +3,12 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const winston = require("winston");
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 
 const app = express();
 const PORT = 5050;
+const saltRounds = 10;
 
 app.use(express.json()); 
 
@@ -16,7 +19,23 @@ const logger = winston.createLogger({
       new winston.transports.File({ filename: "server.log" }) // Логирование в файл
     ]
   });
+
+  const authenticateToken = (req, res, next) => {
+    const token = req.headers["authorization"]?.split(" ")[1];
   
+    if (!token) {
+      return res.status(401).json({ error: "Доступ запрещен" });
+    }
+  
+    jwt.verify(token, "SECRET_KEY", (err, user) => {
+      if (err) {
+        return res.status(403).json({ error: "Недействительный токен" });
+      }
+      req.user = user;
+      next();
+    });
+  };
+
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
@@ -63,7 +82,6 @@ app.post("/register", (req, res) => {
     });
   });
   
-  // Маршрут логина
   app.post("/login", (req, res) => {
     const { email, password } = req.body;
   
@@ -92,7 +110,8 @@ app.post("/register", (req, res) => {
   
         if (result) {
           // Пароль совпадает
-          res.json({ success: true, user });
+          const token = jwt.sign({ id: user.id, name: user.name }, "SECRET_KEY", { expiresIn: "1h" });
+          res.json({ token });
         } else {
           // Пароль не совпадает
           res.status(400).json({ error: "Неверный email или пароль" });
@@ -100,6 +119,7 @@ app.post("/register", (req, res) => {
       });
     });
   });
+  
   
 app.get("/tests", (req, res) => {
 db.all("SELECT * FROM tests", (err, rows) => {
@@ -157,28 +177,28 @@ db.all(
 });
 
 app.post("/tests/:id/results", (req, res) => {
-const { userId, answers } = req.body;
-const testId = req.params.id;
+    const { userId, answers } = req.body;
+    const testId = req.params.id;
 
-const totalScore = answers.reduce((acc, answer) => acc + answer.points, 0);
+    const totalScore = answers.reduce((acc, answer) => acc + answer.points, 0);
 
-let diagnosis = "";
-if (totalScore <= 4) diagnosis = "Нет проблем (0-4%)";
-else if (totalScore <= 26) diagnosis = "Легкие проблемы (5-24%)";
-else if (totalScore <= 54) diagnosis = "Умеренные проблемы (25-49%)";
-else if (totalScore <= 105) diagnosis = "Тяжелые проблемы (50-95%)";
-else diagnosis = "Абсолютные проблемы (96-100%)";
+    let diagnosis = "";
+    if (totalScore <= 4) diagnosis = "Нет проблем (0-4%)";
+    else if (totalScore <= 26) diagnosis = "Легкие проблемы (5-24%)";
+    else if (totalScore <= 54) diagnosis = "Умеренные проблемы (25-49%)";
+    else if (totalScore <= 105) diagnosis = "Тяжелые проблемы (50-95%)";
+    else diagnosis = "Абсолютные проблемы (96-100%)";
 
-db.run(
-    "INSERT INTO results (user_id, test_id, score, diagnosis) VALUES (?, ?, ?, ?)",
-    [userId, testId, totalScore, diagnosis],
-    function (err) {
-    if (err) {
-        res.status(500).json({ error: "Ошибка сохранения результата" });
-    } else {
-        res.json({ success: true, totalScore, diagnosis });
-    }
-    }
-);
+    db.run(
+        "INSERT INTO results (user_id, test_id, score, diagnosis) VALUES (?, ?, ?, ?)",
+        [userId, testId, totalScore, diagnosis],
+        function (err) {
+        if (err) {
+            res.status(500).json({ error: "Ошибка сохранения результата" });
+        } else {
+            res.json({ success: true, totalScore, diagnosis });
+        }
+        }
+    );
 });
   

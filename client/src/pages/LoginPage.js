@@ -1,9 +1,7 @@
-// LoginPage.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Для навигации после успешного логина
 import "../styles/LoginPage.css"; // Стили для страницы логина
 
-// Кастомная кнопка
 const CustomButton = ({ children, onClick }) => {
   return (
     <button className="custom-button" onClick={onClick}>
@@ -12,20 +10,39 @@ const CustomButton = ({ children, onClick }) => {
   );
 };
 
-const LoginPage = () => {
+const LoginPage = ({setIsAuthenticated}) => {
   const [email, setEmail] = useState(""); // Хранение email
   const [password, setPassword] = useState(""); // Хранение пароля
   const navigate = useNavigate(); // Хук для навигации
 
-  const handleLogin = () => {
-    // Простая логика для демонстрации
-    if (email === "test@example.com" && password === "password") {
-      // Если логин успешный, перенаправляем на главную страницу
-      navigate("/dashboard");
-    } else {
-      alert("Неверный email или пароль");
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("http://localhost:5050/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        // Сохраняем токен в локальном хранилище
+        localStorage.setItem("authToken", result.token);
+  
+        // Устанавливаем авторизацию и переходим на дашборд
+        setIsAuthenticated(true);
+        navigate("/dashboard");
+      } else {
+        alert(result.error || "Ошибка входа");
+      }
+    } catch (error) {
+      console.error("Ошибка при попытке входа:", error);
+      alert("Произошла ошибка при соединении с сервером");
     }
   };
+  
 
   return (
     <div className="login-page">
@@ -49,9 +66,14 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)} // Обработка ввода пароля
           />
           <CustomButton onClick={handleLogin}>Войти</CustomButton>
-          <a href="/forgotpassword" className="forgot-password">
-            Забыли пароль?
-          </a>
+          <div className="boxForgotPassword">
+            <a href="/forgotpassword" className="forgot-password">
+              Забыли пароль?
+            </a>
+            <a href="/register" className="forgot-password">
+              Зарегистрироваться
+            </a>
+          </div>
         </div>
       </div>
     </div>

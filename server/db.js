@@ -8,4 +8,14 @@ const db = new sqlite3.Database("./db.sqlite", (err) => {
   }
 });
 
+const sql = `DELETE FROM answers WHERE id > 22`;
+
+db.run(sql, function (err) {
+    if (err) {
+        console.error('Ошибка при удалении записей:', err.message);
+    } else {
+        console.log(`Успешно удалено записей: ${this.changes}`);
+    }
+});
+
 module.exports = db;

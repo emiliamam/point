@@ -92,14 +92,19 @@ body {
   
   /* Ссылка на восстановление пароля */
   .forgot-password {
-    margin-top: 16px;
+    margin: 16px;
     font-family: "Geometria Light", sans-serif;
     font-size: 12px;
     color: #497ae2;
     text-decoration: none;
+
   }
   
   .forgot-password:hover {
     text-decoration: underline;
   }
   
+  .boxForgotPassword {
+    margin-top: 16px;
+    flex-direction: row;
+  }

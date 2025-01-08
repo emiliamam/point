@@ -1,9 +1,7 @@
-// RegisterPage.js
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Для навигации после регистрации
-import "../styles/RegisterPage.css"; // Стили для страницы регистрации
+import { useNavigate } from "react-router-dom";
+import "../styles/RegisterPage.css";
 
-// Кастомная кнопка
 const CustomButton = ({ children, onClick }) => {
   return (
     <button className="custom-button" onClick={onClick}>
@@ -13,18 +11,38 @@ const CustomButton = ({ children, onClick }) => {
 };
 
 const RegisterPage = () => {
-  const [name, setName] = useState(""); // Хранение имени
-  const [email, setEmail] = useState(""); // Хранение email
-  const [password, setPassword] = useState(""); // Хранение пароля
-  const [confirmPassword, setConfirmPassword] = useState(""); // Хранение подтверждения пароля
-  const navigate = useNavigate(); // Хук для навигации
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleRegister = () => {
-    if (password === confirmPassword) {
-      // Логика успешной регистрации (для демонстрации)
-      navigate("/dashboard");
-    } else {
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
       alert("Пароли не совпадают");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5050/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("Регистрация прошла успешно");
+        navigate("/dashboard"); // Перенаправление на дашборд
+      } else {
+        alert(result.error || "Ошибка регистрации");
+      }
+    } catch (error) {
+      console.error("Ошибка при регистрации:", error);
+      alert("Произошла ошибка при соединении с сервером");
     }
   };
 
@@ -41,14 +59,14 @@ const RegisterPage = () => {
               placeholder="ФИО"
               className="input-field"
               value={name}
-              onChange={(e) => setName(e.target.value)} // Обработка ввода имени
+              onChange={(e) => setName(e.target.value)}
             />
             <input
               type="email"
               placeholder="Email"
               className="input-field"
               value={email}
-              onChange={(e) => setEmail(e.target.value)} // Обработка ввода email
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="form-row">
@@ -57,20 +75,25 @@ const RegisterPage = () => {
               placeholder="Пароль"
               className="input-field"
               value={password}
-              onChange={(e) => setPassword(e.target.value)} // Обработка ввода пароля
+              onChange={(e) => setPassword(e.target.value)}
             />
             <input
               type="password"
               placeholder="Повторите пароль"
               className="input-field"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)} // Обработка ввода подтверждения пароля
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
           <CustomButton onClick={handleRegister}>Зарегистрироваться</CustomButton>
-          <a href="/login" className="forgot-password">
-            Уже есть аккаунт?
-          </a>
+          <div className="boxForgotPassword">
+            <a href="/forgotpassword" className="forgot-password">
+              Забыли пароль?
+            </a>
+            <a href="/" className="forgot-password">
+              Войти в аккаунт
+            </a>
+          </div>
         </div>
       </div>
     </div>

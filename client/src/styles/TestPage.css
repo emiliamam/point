@@ -1,104 +1,93 @@
-/* Общий фон */
+/* Общий стиль страницы */
 body {
     margin: 0;
     font-family: "Geometria", sans-serif;
     background-color: #ebf4fc;
   }
   
-  /* Основной контейнер */
-  .dashboard {
+  /* Центрирование контейнера */
+  .test-page {
     display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
   }
   
-  /* Навигационная панель */
-  .navigation {
-    background-color: #497ae2;
-    width: 250px;
-    color: white;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  .navigation ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .nav-item {
-    padding: 15px;
-    font-family: "Geometria Medium", sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .nav-item.active,
-  .nav-item:hover {
-    background-color: #3257a4;
-  }
-  
-  /* Контент страницы */
-  .testing-page {
-    flex: 1;
-    padding: 20px;
-    background-color: #ebf4fc;
-    box-sizing: border-box;
-  }
-  
-  .testing-page h2 {
-    font-family: "Geometria Medium", sans-serif;
-    color: #3257a4;
-    margin-bottom: 20px;
-  }
-  
-  /* Таблица тестов */
-  .test-table {
+  /* Основной контейнер */
+  .test-container {
     background-color: white;
     border-radius: 16px;
+    width: 800px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #d1d9e6;
+    border: 1px solid #497ae2;
+    color: #3257a4;
+  }
+  
+  /* Верхний блок с прогрессом */
+  .header-box {
+    background-color: white;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding: 16px;
+    text-align: left;
+    font-family: "Geometria Medium", sans-serif;
+    border-bottom: 1px solid #497ae2;
+  }
+  
+  .header-box h1 {
+    margin-left: 14px;
+  }
+  
+  /* Блок контента */
+  .content-box {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Прогресс-бар */
+  .progress-bar progress {
+    width: 100%;
+    height: 20px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    background-color: #f0f0f0;
+  }
+  
+  progress::-webkit-progress-bar {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+  }
+  
+  progress::-webkit-progress-value {
+    background: linear-gradient(90deg, #3257a4, #497ae2);
+    border-radius: 10px;
+  }
+  
+  /* Вопрос */
+  .content-box h2 {
+    text-align: center;
+    font-family: "Geometria Medium", sans-serif;
+    font-size: 18px;
+    margin-bottom: 24px;
+  }
+  
+  /* Список ответов */
+  .answer-list {
+    list-style-type: none;
+    padding: 0;
     width: 100%;
   }
   
-  .test-row {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    border-bottom: 1px solid #d1d9e6;
-    gap: 16px;
+  .answer-list li {
+    margin-bottom: 16px;
   }
   
-  .test-row:last-child {
-    border-bottom: none;
-  }
-  
-  .test-number {
-    width: 5%;
-    font-family: "Geometria Light", sans-serif;
-    color: #3257a4;
-    text-align: center;
-  }
-  
-  .test-name {
-    flex: 2;
-    font-family: "Geometria Light", sans-serif;
-    color: #3257a4;
-  }
-  
-  .test-status {
-    flex: 1;
-    font-family: "Geometria Light", sans-serif;
-    color: #3257a4;
-    text-align: center;
-  }
-  
-  /* Кастовая кнопка */
-  .custom-button {
-    flex: 1;
-    padding: 8px 12px;
+  .answer-list .custom-button {
+    width: 100%;
+    padding: 12px;
     font-family: "Geometria Medium", sans-serif;
     font-size: 14px;
     color: white;
@@ -107,12 +96,10 @@ body {
     background: linear-gradient(90deg, #3257a4, #497ae2, #3257a4);
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  .custom-button:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  .answer-list .custom-button:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }
   
-  .content {
-    padding: 20px;
-  }

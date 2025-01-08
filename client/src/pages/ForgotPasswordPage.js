@@ -22,7 +22,7 @@ const ForgotPasswordPage = () => {
             <input type="email" placeholder="Email" className="input-field" />
           </div>
           <CustomButton>Выслать код</CustomButton>
-          <a href="#" className="forgot-password">
+          <a href="/" className="forgot-password">
             Войти в аккаунт
           </a>
         </div>

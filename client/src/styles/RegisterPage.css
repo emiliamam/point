@@ -97,3 +97,8 @@ body {
 .custom-button:hover {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+
+.boxForgotPassword {
+  margin-top: 16px;
+  flex-direction: row;
+}
