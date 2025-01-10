@@ -23,19 +23,7 @@
    npm install
    ```
 
-3. Создайте файл `.env` и добавьте переменные:
-   ```
-   EMAIL_USER=your-email@gmail.com
-   EMAIL_PASS=your-email-password
-   SECRET_KEY=your-secret-key
-   ```
-
-4. Настройте базу данных SQLite (если еще не создана):
-   ```bash
-   node init_db.js
-   ```
-
-5. Запустите сервер:
+3. Запустите сервер:
    ```bash
    node server.js
    ```
