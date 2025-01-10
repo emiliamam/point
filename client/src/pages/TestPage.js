@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "../styles/TestPage.css";
+import "../styles/Navigation.css";
 
 const TestPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate(); // Используем useNavigate для навигации
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
@@ -27,25 +29,46 @@ const TestPage = () => {
     if (nextIndex < questions.length) {
       setCurrentIndex(nextIndex);
       setProgress(((nextIndex) / questions.length) * 100);
-      console.log(questions.length)
+      console.log(questions.length);
     } else {
       axios
-        .post(`http://localhost:5050/tests/${id}/results`, {
-          userId: 1,
-          answers,
+        .post(
+          `http://localhost:5050/tests/${id}/results`,
+          { answers }, 
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`, 
+            },
+          }
+        )
+        .then((response) => {
+          alert(`Результат: ${response.data.diagnosis}`);
+          navigate("/dashboard/testing"); // Навигация после завершения теста
         })
-        .then((response) => alert(`Результат: ${response.data.diagnosis}`));
+        .catch((error) => console.error("Ошибка отправки результата:", error));
     }
   };
+  
 
   if (!questions.length) return <p>Загрузка...</p>;
   const currentQuestion = questions[currentIndex];
 
   return (
     <div className="test-page">
+         <button
+              className="back-button"
+              onClick={() => navigate("/dashboard/testing")}
+            >
+              Назад
+            </button>
       <div className="test-container">
+        
         <div className="header-box">
-          <h1>Прогресс: {progress.toFixed(0)}%</h1>
+            
+          <div className="header-content">
+           
+            <h1 className="progress-title">Прогресс: {progress.toFixed(0)}%</h1>
+          </div>
         </div>
         <div className="content-box">
           <div className="progress-bar">

@@ -11,6 +11,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    flex-direction: column;
   }
   
   /* Основной контейнер */
@@ -51,7 +52,6 @@ body {
     width: 100%;
     height: 20px;
     border-radius: 10px;
-    margin-bottom: 24px;
     overflow: hidden;
     background-color: #f0f0f0;
   }
@@ -72,6 +72,7 @@ body {
     font-family: "Geometria Medium", sans-serif;
     font-size: 18px;
     margin-bottom: 24px;
+    color: #3257a4;
   }
   
   /* Список ответов */
@@ -103,3 +104,34 @@ body {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }
   
+  .back-button {
+    position: absolute;
+    top: 20px; /* Расстояние сверху */
+    left: 20px; /* Расстояние слева */
+    z-index: 100; /* Чтобы кнопка была поверх остальных элементов */
+    padding: 10px 20px;
+    font-size: 14px;
+    color: white;
+    background-color: #3257a4;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+  }
+  
+  .back-button:hover {
+    background-color: #497ae2;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Заголовок "Прогресс:" */
+  .header-box h1 {
+    font-size: 18px;
+    color: #3257a4;
+    margin: 0;
+  }
+
+  .content h2 {
+    color: #3257a4;
+    align-items: center;
+  }

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/RegisterPage.css";
+import "../styles/TestPage.css";
+import "../styles/Navigation.css";
 
 const CustomButton = ({ children, onClick }) => {
   return (
@@ -17,7 +19,29 @@ const RegisterPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
+  const validateInput = () => {
+    if (!email.includes("@") || !email.includes(".")) {
+      alert("Введите корректный email!");
+      return false;
+    }
+  
+    if (password.length < 8) {
+      alert("Пароль должен быть не менее 8 символов.");
+      return false;
+    }
+
+    if(name==""){
+        alert("Введите ФИО");
+      return false;
+    }
+  
+    return true;
+  };
   const handleRegister = async () => {
+    if (!validateInput()) {
+        return; // Остановить отправку данных
+      }
+    
     if (password !== confirmPassword) {
       alert("Пароли не совпадают");
       return;
@@ -36,6 +60,8 @@ const RegisterPage = () => {
 
       if (response.ok) {
         alert("Регистрация прошла успешно");
+        localStorage.setItem("authToken", result.token);
+        console.log(result.token, " токен при регистрации")
         navigate("/dashboard"); // Перенаправление на дашборд
       } else {
         alert(result.error || "Ошибка регистрации");

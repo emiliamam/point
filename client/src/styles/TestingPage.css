@@ -1,0 +1,79 @@
+/* Основной контейнер страницы */
+.testing-container {
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 12px;
+    font-family: "Geometria", sans-serif;
+  }
+  
+  /* Заголовок страницы */
+  .testing-title {
+    text-align: left;
+    font-size: 24px;
+    color: #3257a4;
+    margin-bottom: 20px;
+  }
+  
+  /* Список тестов */
+  .test-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Карточка теста */
+  .test-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .test-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Информация о тесте */
+  .test-info {
+    flex-grow: 1;
+  }
+  
+  .test-name {
+    font-size: 18px;
+    color: #3257a4;
+    margin: 0;
+  }
+  
+  .test-status {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .test-status span {
+    color: #497ae2;
+    font-weight: bold;
+  }
+  
+  /* Кнопка */
+  .test-button {
+    padding: 10px 10px;
+    font-size: 14px;
+    color: white;
+    background-color: #3257a4;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+  }
+  
+  .test-button:hover {
+    background-color: #497ae2;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  

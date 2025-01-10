@@ -1,25 +1,125 @@
-.navigation ul {
+.navigation {
+    background-color: #497ae2;
+    width: 250px;
+    color: white;
+    padding: 20px;
+    height: 100vh; 
+    box-sizing: border-box;
+  }
+
+
+
+  .navigation ul {
     list-style: none;
     padding: 0;
     margin: 0;
-  }
+}
   
-  .nav-item {
+.nav-item {
     display: block;
-    padding: 15px;
-    font-family: "Geometria Medium", sans-serif;
-    font-size: 14px;
+    padding: 15px 20px;
+    font-family: "Geometria Medium", sans-serif; /* Использование Geometria Medium */
+    font-size: 16px;
     color: white;
     text-decoration: none;
     border-radius: 8px;
-    transition: background-color 0.3s ease;
-  }
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
   
   .nav-item:hover {
     background-color: #3257a4;
   }
   
   .nav-item.active {
-    background-color: #3257a4;
+    background-color: white;
+    color: #3257a4;
   }
   
+
+  .results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: "Geometria", sans-serif;
+  }
+  
+  .results-table th,
+  .results-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .results-table th {
+    background-color: #3257a4;
+    color: white;
+  }
+  
+  .results-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .results-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .user-info {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .user-info label {
+    font-family: "Geometria", sans-serif;
+    font-size: 16px;
+    color: #3257a4;
+  }
+  
+  .user-info input {
+    width: 100%;
+    padding: 10px;
+    font-family: "Geometria", sans-serif;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 5px;
+  }
+  
+  .save-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-family: "Geometria Medium", sans-serif;
+    font-size: 16px;
+    color: white;
+    background-color: #3257a4;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-button:hover {
+    background-color: #497ae2;
+  }
+  
+  .pContent{
+    color: #3257a4;
+  }
+
+  .logout-button {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: "Geometria Medium", sans-serif;
+    font-size: 16px;
+    margin-top: 20px;
+    justify-content: center;
+  }
+  
+  .logout-button:hover {
+    background-color: #c0392b;
+  }
