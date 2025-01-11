@@ -191,7 +191,8 @@
   {
     "success": true,
     "totalScore": 5,
-    "diagnosis": "Легкие проблемы (5-24%)"
+    "diagnosis": "Легкие проблемы (5-24%)",
+    "completed_at": "2025-01-11T12:00:00.000Z"
   }
   ```
 
