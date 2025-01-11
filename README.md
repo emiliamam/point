@@ -98,10 +98,10 @@
     "email": "user@example.com",
     "password": "securepassword",
     "name": "User Name",
-    "test_status": "[
+    "test_status": "{
     { id: 1, name: "Тестирование ПТСР", status: "Не пройден", lastDate: null },
     { id: 2, name: "Тестирование ШОВТС", status: "Не пройден", lastDate: null },
-  ]"
+  }"
   }
   ```
 - **Ответ**:
