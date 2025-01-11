@@ -4,7 +4,6 @@
 
 - **Node.js**: Серверная среда.
 - **SQLite**: База данных.
-- **Express.js**: Фреймворк для создания RESTful API.
 - **JWT**: Для аутентификации и авторизации.
 - **bcrypt**: Для хэширования паролей.
 
@@ -98,7 +97,11 @@
   {
     "email": "user@example.com",
     "password": "securepassword",
-    "name": "User Name"
+    "name": "User Name",
+    "test_status": "[
+    { id: 1, name: "Тестирование ПТСР", status: "Не пройден", lastDate: null },
+    { id: 2, name: "Тестирование ШОВТС", status: "Не пройден", lastDate: null },
+  ]"
   }
   ```
 - **Ответ**:
