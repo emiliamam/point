@@ -1,11 +1,9 @@
-/* Общий стиль страницы */
 body {
     margin: 0;
     font-family: "Geometria", sans-serif;
     background-color: #ebf4fc;
   }
   
-  /* Центрирование контейнера */
   .test-page {
     display: flex;
     justify-content: center;
@@ -14,7 +12,6 @@ body {
     flex-direction: column;
   }
   
-  /* Основной контейнер */
   .test-container {
     background-color: white;
     border-radius: 16px;
@@ -24,7 +21,6 @@ body {
     color: #3257a4;
   }
   
-  /* Верхний блок с прогрессом */
   .header-box {
     background-color: white;
     border-top-left-radius: 16px;
@@ -39,7 +35,6 @@ body {
     margin-left: 14px;
   }
   
-  /* Блок контента */
   .content-box {
     padding: 24px;
     display: flex;
@@ -47,7 +42,6 @@ body {
     align-items: center;
   }
   
-  /* Прогресс-бар */
   .progress-bar progress {
     width: 100%;
     height: 20px;
@@ -66,7 +60,6 @@ body {
     border-radius: 10px;
   }
   
-  /* Вопрос */
   .content-box h2 {
     text-align: center;
     font-family: "Geometria Medium", sans-serif;
@@ -75,7 +68,6 @@ body {
     color: #3257a4;
   }
   
-  /* Список ответов */
   .answer-list {
     list-style-type: none;
     padding: 0;
@@ -106,9 +98,9 @@ body {
   
   .back-button {
     position: absolute;
-    top: 20px; /* Расстояние сверху */
-    left: 20px; /* Расстояние слева */
-    z-index: 100; /* Чтобы кнопка была поверх остальных элементов */
+    top: 20px; 
+    left: 20px; 
+    z-index: 100; 
     padding: 10px 20px;
     font-size: 14px;
     color: white;
@@ -124,7 +116,6 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  /* Заголовок "Прогресс:" */
   .header-box h1 {
     font-size: 18px;
     color: #3257a4;

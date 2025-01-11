@@ -1,7 +1,6 @@
 import React from "react";
 import "../styles/RegisterPage.css"; 
 
-// Кастовая кнопка
 const CustomButton = ({ children, onClick }) => {
   return (
     <button className="custom-button" onClick={onClick}>

@@ -30,7 +30,6 @@ const TestingPage = () => {
       .then((data) => {
         console.log("Данные получены:", data);
 
-        // Обновляем `tests` на основе данных из testStatus
         const testStatus = data.testStatus;
         const updatedTests = tests.map((test) => ({
           ...test,

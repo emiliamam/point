@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/TestPage.css";
 import "../styles/Navigation.css";
-import { useNavigate } from "react-router-dom"; // Для навигации
+import { useNavigate } from "react-router-dom"; 
 
 const DashboardPage = () => {
   const [userData, setUserData] = useState({
@@ -9,16 +9,15 @@ const DashboardPage = () => {
     email: "",
   });
   const [newPassword, setNewPassword] = useState("");
-  const navigate = useNavigate(); // Хук для навигации
+  const navigate = useNavigate(); 
 
   console.log(localStorage.getItem("authToken"));
 
   useEffect(() => {
-    // Имитация запроса на сервер для получения текущих данных пользователя
     fetch("http://localhost:5050/user", {
     method: "GET",
     headers: {
-        "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Токен из localStorage
+        "Authorization": `Bearer ${localStorage.getItem("authToken")}`, 
         "Content-Type": "application/json"
     }
 })
@@ -37,13 +36,12 @@ const DashboardPage = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken"); // Удаляем токен
-    navigate("/"); // Перенаправляем на страницу входа
+    localStorage.removeItem("authToken");
+    navigate("/"); 
   };
 
 
   const handleSaveChanges = () => {
-    // Отправка данных на сервер
     fetch("http://localhost:5050/user/update", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

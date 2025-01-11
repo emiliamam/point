@@ -28,21 +28,18 @@ const transporter = nodemailer.createTransport({
 const logger = winston.createLogger({
     level: "info",
     transports: [
-      new winston.transports.Console({ format: winston.format.simple() }), // Логирование в консоль
-      new winston.transports.File({ filename: "server.log" }) // Логирование в файл
+      new winston.transports.Console({ format: winston.format.simple() }), 
+      new winston.transports.File({ filename: "server.log" }) 
     ]
   });
 
-// Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
-// Простейший маршрут
 app.get("/", (req, res) => {
   res.send("Сервер работает!");
 });
 
-// Запуск сервера
 app.listen(PORT, () => {
   console.log(`Сервер запущен на http://localhost:${PORT}`);
 });
@@ -64,7 +61,7 @@ const authenticateToken = (req, res, next) => {
         return res.status(403).json({ error: "Недействительный токен" });
       }
   
-      req.user = user; // Данные пользователя из токена
+      req.user = user; 
       next();
     });
   };
@@ -76,16 +73,13 @@ const authenticateToken = (req, res, next) => {
         return;
       }
   
-      // Получить текущий статус тестов
       let testStatus = row.test_status ? JSON.parse(row.test_status) : {};
   
-      // Обновить данные для конкретного теста
       testStatus[testId] = {
         status,
         last_date: new Date().toISOString(),
       };
   
-      // Сохранить обновленный JSON в базу
       db.run(
         'UPDATE users SET test_status = ? WHERE id = ?',
         [JSON.stringify(testStatus), userId],
@@ -100,7 +94,6 @@ const authenticateToken = (req, res, next) => {
     });
   };
 
-// Маршрут регистрации
 app.post("/register", (req, res) => {
     const { email, password, name } = req.body;
     const initialTestStatus = JSON.stringify({
@@ -112,14 +105,12 @@ app.post("/register", (req, res) => {
       return res.status(400).json({ error: "Не все поля заполнены" });
     }
   
-    // Хэшируем пароль перед сохранением
     bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
       if (err) {
         console.error("Ошибка хэширования пароля", err);
         return res.status(500).json({ error: "Ошибка сервера" });
       }
   
-      // Вставляем данные в базу
       db.run(
         "INSERT INTO users (email, password, name, test_status) VALUES (?, ?, ?, ?)",
         [email, hashedPassword, name, initialTestStatus],
@@ -128,7 +119,7 @@ app.post("/register", (req, res) => {
             console.error("Ошибка при добавлении пользователя", err);
             return res.status(400).json({ error: "Пользователь с таким email уже существует" });
           }
-          const userId = this.lastID; // Получаем ID вставленного пользователя
+          const userId = this.lastID; 
           const token = jwt.sign({ id: userId, name }, "SECRET_KEY", { expiresIn: "1h" });
   
           res.json({ token });
@@ -144,7 +135,6 @@ app.post("/register", (req, res) => {
       return res.status(400).json({ error: "Не все поля заполнены" });
     }
   
-    // Ищем пользователя в базе данных
     db.get("SELECT * FROM users WHERE email = ?", [email], (err, user) => {
       if (err) {
         console.error("Ошибка базы данных:", err.message);
@@ -152,11 +142,9 @@ app.post("/register", (req, res) => {
       }
   
       if (!user) {
-        // Если пользователь не найден
         return res.status(400).json({ error: "Неверный email или пароль" });
       }
   
-      // Сравниваем хэш пароля
       bcrypt.compare(password, user.password, (err, result) => {
         if (err) {
           console.error("Ошибка при проверке пароля", err);
@@ -164,12 +152,10 @@ app.post("/register", (req, res) => {
         }
   
         if (result) {
-          // Пароль совпадает
           const token = jwt.sign({ id: user.id, name: user.name }, "SECRET_KEY", { expiresIn: "1h" });
 
             res.json({ token });
         } else {
-          // Пароль не совпадает
           res.status(400).json({ error: "Неверный email или пароль" });
         }
       });
@@ -244,7 +230,7 @@ app.get("/tests/:id/questions", (req, res) => {
   
 
   app.post("/tests/:id/results", authenticateToken, (req, res) => {
-    const userId = req.user.id; // Получаем ID пользователя из токена
+    const userId = req.user.id;
     const testId = req.params.id;
     const { answers } = req.body;
   
@@ -252,10 +238,8 @@ app.get("/tests/:id/questions", (req, res) => {
       return res.status(400).json({ error: "Отсутствуют обязательные данные" });
     }
   
-    // Рассчитываем общий балл
     const totalScore = answers.reduce((acc, answer) => acc + answer.points, 0);
   
-    // Определяем диагноз
     let diagnosis = "";
     if (totalScore <= 4) diagnosis = "Нет проблем (0-4%)";
     else if (totalScore <= 26) diagnosis = "Легкие проблемы (5-24%)";
@@ -263,9 +247,8 @@ app.get("/tests/:id/questions", (req, res) => {
     else if (totalScore <= 105) diagnosis = "Тяжелые проблемы (50-95%)";
     else diagnosis = "Абсолютные проблемы (96-100%)";
   
-    const completedAt = new Date().toISOString(); // Текущая дата и время
+    const completedAt = new Date().toISOString();
   
-    // Сохраняем результат теста в таблицу `results`
     db.run(
       "INSERT INTO results (user_id, test_id, total_score, diagnosis, completed_at) VALUES (?, ?, ?, ?, ?)",
       [userId, testId, totalScore, diagnosis, completedAt],
@@ -277,14 +260,12 @@ app.get("/tests/:id/questions", (req, res) => {
   
         console.log("Результат успешно сохранен:", { userId, testId, totalScore, diagnosis, completedAt });
   
-        // После сохранения результата обновляем статус теста
         db.get("SELECT test_status FROM users WHERE id = ?", [userId], (err, row) => {
           if (err) {
             console.error("Ошибка получения статуса тестов:", err.message);
             return res.status(500).json({ error: "Ошибка обновления статуса теста" });
           }
   
-          // Обновляем или создаем данные для тестов
           let testStatus = row?.test_status ? JSON.parse(row.test_status) : {};
           testStatus[testId] = {
             status: "Пройден",
@@ -301,7 +282,6 @@ app.get("/tests/:id/questions", (req, res) => {
               }
   
               console.log("Статус теста успешно обновлен");
-              // Отправляем финальный ответ клиенту
               res.json({ success: true, totalScore, diagnosis });
             }
           );
@@ -312,7 +292,7 @@ app.get("/tests/:id/questions", (req, res) => {
   
 
 app.get("/results", authenticateToken, (req, res) => {
-    const userId = req.user.id; // Получаем ID пользователя из токена
+    const userId = req.user.id; 
   
     const query = `
       SELECT 
@@ -344,7 +324,7 @@ app.get("/results", authenticateToken, (req, res) => {
   });
 
 app.get("/user", authenticateToken, (req, res) => {
-    const userId = req.user.id; // Получаем ID пользователя из токена
+    const userId = req.user.id; 
 
     const query = `
         SELECT name, email
@@ -368,7 +348,7 @@ app.get("/user", authenticateToken, (req, res) => {
 
 
 app.post("/user/update", authenticateToken, (req, res) => {
-    const userId = req.user.id; // Получение ID пользователя из токена
+    const userId = req.user.id; 
     const { name, email, password } = req.body;
 
     if (!name || !email) {
@@ -395,7 +375,6 @@ app.post("/user/update", authenticateToken, (req, res) => {
     };
 
     if (password) {
-        // Хэшируем пароль, если он передан
         bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
             if (err) {
                 console.error("Ошибка хэширования пароля:", err.message);
@@ -404,14 +383,13 @@ app.post("/user/update", authenticateToken, (req, res) => {
             updateUser(hashedPassword);
         });
     } else {
-        // Если пароль не передан, обновляем только имя и email
         updateUser();
     }
 });
 
 
 app.get('/users/tests', authenticateToken, (req, res) => {
-    const userId = req.user.id; // Получаем userId из токена
+    const userId = req.user.id; 
 
     db.get('SELECT test_status FROM users WHERE id = ?', [userId], (err, row) => {
         if (err) {

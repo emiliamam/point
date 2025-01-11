@@ -6,7 +6,7 @@ import "../styles/Navigation.css";
 
 const TestPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate(); // Используем useNavigate для навигации
+  const navigate = useNavigate(); 
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
@@ -43,7 +43,7 @@ const TestPage = () => {
         )
         .then((response) => {
           alert(`Результат: ${response.data.diagnosis}`);
-          navigate("/dashboard/testing"); // Навигация после завершения теста
+          navigate("/dashboard/testing"); 
         })
         .catch((error) => console.error("Ошибка отправки результата:", error));
     }

@@ -39,7 +39,7 @@ const RegisterPage = () => {
   };
   const handleRegister = async () => {
     if (!validateInput()) {
-        return; // Остановить отправку данных
+        return; 
       }
     
     if (password !== confirmPassword) {
@@ -62,7 +62,7 @@ const RegisterPage = () => {
         alert("Регистрация прошла успешно");
         localStorage.setItem("authToken", result.token);
         console.log(result.token, " токен при регистрации")
-        navigate("/dashboard"); // Перенаправление на дашборд
+        navigate("/dashboard"); 
       } else {
         alert(result.error || "Ошибка регистрации");
       }

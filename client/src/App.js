@@ -16,12 +16,10 @@ import "./App.css";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Проверяем токен при загрузке
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     setIsAuthenticated(!!token);
 
-    // Обновляем состояние при изменении localStorage
     const handleStorageChange = () => {
       const token = localStorage.getItem("authToken");
       setIsAuthenticated(!!token);
@@ -36,7 +34,6 @@ function App() {
     setIsAuthenticated(false);
   };
 
-  // Компонент для защищенных маршрутов
   const ProtectedRoute = ({ children }) => {
     if (!isAuthenticated) {
       return <Navigate to="/" replace />;
@@ -47,12 +44,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
         <Route path="/" element={<LoginPage setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
 
-        {/* Protected Routes */}
         <Route
           path="/dashboard/*"
           element={
@@ -70,14 +65,12 @@ function App() {
           }
         />
 
-        {/* 404 Page */}
         <Route path="*" element={<div>Страница не найдена</div>} />
       </Routes>
     </Router>
   );
 }
 
-// Dashboard Component (структура защищенных маршрутов)
 const Dashboard = ({ logout }) => {
   return (
     <div className="dashboard">

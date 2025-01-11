@@ -32,7 +32,7 @@ const ResultsPage = () => {
   }
 
   if (!results.length) {
-    return <p className="pContent" >Вы пока не прошли никакой тест</p>; // Сообщение, если результатов нет
+    return <p className="pContent" >Вы пока не прошли никакой тест</p>; 
   }
 
   return (

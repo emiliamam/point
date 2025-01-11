@@ -87,19 +87,17 @@
   }
 }
 
-/* Контейнер для основного содержимого */
 .page-content {
-  margin-left: 240px; /* Отступ слева, равный ширине навигационной панели */
+  margin-left: 240px; 
   padding: 20px;
-  background-color: #ebf4fc; /* Светлый фон для основного контента */
-  font-family: "Geometria", sans-serif; /* Использование шрифта Geometria */
+  background-color: #ebf4fc; 
+  font-family: "Geometria", sans-serif;
 }
 
-/* Заголовок страницы */
 .page-content h1 {
   font-family: "Geometria Medium", sans-serif;
   font-size: 24px;
-  color: #3257a4; /* Темно-синий цвет */
+  color: #3257a4; 
   margin-bottom: 20px;
 }
 .page-container {
@@ -109,15 +107,14 @@
   padding: 0;
 }
 
-/* Навигационная панель */
 .navigation {
   background-color: #3257a4;
-  width: 240px; /* Ширина навигации */
+  width: 240px; 
   height: 100vh;
   display: flex;
   flex-direction: column;
   padding-top: 20px;
-  position: fixed; /* Фиксируем навигацию */
+  position: fixed; 
   top: 0;
   left: 0;
 }

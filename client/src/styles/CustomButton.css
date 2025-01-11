@@ -1,0 +1,17 @@
+.custom-button {
+    width: 100%;
+    padding: 12px;
+    font-family: "Geometria Medium", sans-serif;
+    font-size: 14px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #3257a4, #497ae2, #3257a4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-button:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
