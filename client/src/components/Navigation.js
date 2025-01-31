@@ -34,6 +34,14 @@ const Navigation = () => {
         </li>
         <li>
           <NavLink
+            to="/dashboard/consult"
+            className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
+          >
+            Консультация
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
             to="/dashboard/feedback"
             className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
           >

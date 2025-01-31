@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import TestPage from "./pages/TestPage";
 import TestingPage from "./pages/TestingPage";
+import ConsultPage from "./pages/ConsultPage"
 import ResultsPage from "./pages/ResultsPage";
 import DashboardPage from "./pages/DashboardPage";
 import FeedbackPage from "./pages/FeedbackPage";
@@ -82,6 +83,8 @@ const Dashboard = ({ logout }) => {
           <Route path="results" element={<ResultsPage />} />
           <Route path="feedback" element={<FeedbackPage />} />
           <Route path="tests" element={<TestingPage />} />
+          <Route path="consult" element={<ConsultPage />} />
+
           {/* <Route path="tests/:id" element={<TestPage />} /> */}
         </Routes>
       </div>

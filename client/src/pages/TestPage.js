@@ -11,7 +11,28 @@ const TestPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [progress, setProgress] = useState(0);
-
+  const [showTimeModal, setShowTimeModal] = useState(false);
+  const [selectedDays, setSelectedDays] = useState([]); 
+  const [timeInterval, setTimeInterval] = useState({ start: "", end: "" }); 
+  const [anyDay, setAnyDay] = useState(false);
+  const [scheduleMode, setScheduleMode] = useState("weekDays"); 
+  const [specificDate, setSpecificDate] = useState("");
+  const toggleDaySelection = (day) => {
+    setSelectedDays((prev) =>
+      prev.includes(day)
+        ? prev.filter((d) => d !== day) 
+        : [...prev, day] 
+    );
+  };
+  
+  const handleTimeChange = (field, value) => {
+    setTimeInterval((prev) => ({ ...prev, [field]: value }));
+  };
+  
+  const handleAnyDayChange = () => {
+    setAnyDay((prev) => !prev);
+  };
+  
   useEffect(() => {
     axios
       .get(`http://localhost:5050/tests/${id}/questions`)
@@ -46,10 +67,42 @@ const TestPage = () => {
           navigate("/dashboard/testing"); 
         })
         .catch((error) => console.error("Ошибка отправки результата:", error));
+      setShowTimeModal(true);
     }
   };
   
+  const handleTimeSubmit = () => {
+    if (!anyDay && scheduleMode === "weekDays" && selectedDays.length === 0) {
+      alert("Пожалуйста, выберите дни недели.");
+      return;
+    }
+  
+    if (!anyDay && scheduleMode === "specificDay" && !specificDate) {
+      alert("Пожалуйста, выберите дату.");
+      return;
+    }
+  
 
+  
+    axios
+      .post(
+        `http://localhost:5050/tests/${id}/results`,
+        { answers },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        alert(`Результат: ${response.data.diagnosis}`);
+        navigate("/dashboard/testing");
+      })
+      .catch((error) => console.error("Ошибка отправки результата:", error));
+  };
+  
+  
+  
   if (!questions.length) return <p>Загрузка...</p>;
   const currentQuestion = questions[currentIndex];
 
