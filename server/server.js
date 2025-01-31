@@ -232,7 +232,7 @@ app.get("/tests/:id/questions", (req, res) => {
   app.post("/tests/:id/results", authenticateToken, (req, res) => {
     const userId = req.user.id;
     const testId = req.params.id;
-    const { answers } = req.body;
+    const { answers, preferredSchedule } = req.body;
   
     if (!answers || !testId) {
       return res.status(400).json({ error: "Отсутствуют обязательные данные" });
@@ -258,8 +258,7 @@ app.get("/tests/:id/questions", (req, res) => {
           return res.status(500).json({ error: "Ошибка сохранения результата" });
         }
   
-        console.log("Результат успешно сохранен:", { userId, testId, totalScore, diagnosis, completedAt });
-  
+       
         db.get("SELECT test_status FROM users WHERE id = ?", [userId], (err, row) => {
           if (err) {
             console.error("Ошибка получения статуса тестов:", err.message);
@@ -285,7 +284,10 @@ app.get("/tests/:id/questions", (req, res) => {
               res.json({ success: true, totalScore, diagnosis });
             }
           );
+          
         });
+        console.log("Результат успешно сохранен:", { userId, testId, totalScore, diagnosis, completedAt });
+
       }
     );
   });
@@ -400,4 +402,145 @@ app.get('/users/tests', authenticateToken, (req, res) => {
         const testStatus = row.test_status ? JSON.parse(row.test_status) : {};
         res.json({ testStatus });
     });
+});
+
+app.get('/users/slots', authenticateToken, (req, res) => {
+  const userId = req.user.id; 
+
+  const query = `
+    SELECT 
+      id, 
+      preferred_days, 
+      specific_date, 
+      time_start, 
+      time_end, 
+      any_day, 
+      created_at, 
+      updated_at
+    FROM calls_schedule
+    WHERE user_id = ?
+  `;
+
+  db.all(query, [userId], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: 'Ошибка при получении слотов' });
+      return;
+    }
+
+    const slots = rows.map((row) => ({
+      ...row,
+      preferred_days: row.preferred_days ? JSON.parse(row.preferred_days) : null,
+    }));
+    console.log(slots + "   slots")
+    res.json({ slots });
+  });
+});
+
+
+app.post('/users/slots', authenticateToken, (req, res) => {
+  const userId = req.user.id; 
+  const { preferred_days, specific_date, time_start, time_end, any_day } = req.body;
+
+  const query = `
+    INSERT INTO calls_schedule (user_id, preferred_days, specific_date, time_start, time_end, any_day, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, DATETIME('now'), DATETIME('now'))
+  `;
+
+  const params = [
+    userId,
+    preferred_days ? JSON.stringify(preferred_days) : null,
+    specific_date || null,
+    time_start,
+    time_end,
+    any_day,
+  ];
+
+  db.run(query, params, function (err) {
+    if (err) {
+      res.status(500).json({ error: 'Ошибка при добавлении слота' });
+      return;
+    }
+
+    res.status(201).json({
+      id: this.lastID, 
+      user_id: userId,
+      preferred_days,
+      specific_date,
+      time_start,
+      time_end,
+      any_day,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    });
+  });
+});
+
+
+app.delete("/users/slots/:id", authenticateToken, (req, res) => {
+  const userId = req.user.id; 
+  const slotId = req.params.id;
+  console.log("slotId "+ slotId)
+  console.log("userid "+ userId)
+  const query = `
+    DELETE FROM calls_schedule
+    WHERE id = ? AND user_id = ?
+  `;
+
+  db.run(query, [slotId, userId], function (err) {
+    if (err) {
+      res.status(500).json({ error: "Ошибка при удалении слота" });
+      return;
+    }
+
+    if (this.changes === 0) {
+      res.status(403).json({ error: "Слот не найден или не принадлежит текущему пользователю" });
+      return;
+    }
+
+    res.status(200).json({ message: "Слот успешно удалён" });
+  });
+});
+
+app.put("/users/slots/:id", authenticateToken, (req, res) => {
+  const userId = req.user.id;
+  const slotId = req.params.id; 
+  const { preferred_days, specific_date, time_start, time_end, any_day } = req.body;
+
+  const query = `
+    UPDATE calls_schedule
+    SET preferred_days = ?, specific_date = ?, time_start = ?, time_end = ?, any_day = ?, updated_at = DATETIME('now')
+    WHERE id = ? AND user_id = ?
+  `;
+  const params = [
+    preferred_days ? JSON.stringify(preferred_days) : null,
+    specific_date || null,
+    time_start,
+    time_end,
+    any_day,
+    slotId,
+    userId,
+  ];
+
+  db.run(query, params, function (err) {
+    if (err) {
+      res.status(500).json({ error: "Ошибка при обновлении слота" });
+      return;
+    }
+
+    if (this.changes === 0) {
+      res.status(404).json({ error: "Слот не найден или не принадлежит текущему пользователю" });
+      return;
+    }
+
+    res.status(200).json({
+      message: "Слот успешно обновлён",
+      id: slotId,
+      user_id: userId,
+      preferred_days,
+      specific_date,
+      time_start,
+      time_end,
+      any_day,
+    });
+  });
 });
